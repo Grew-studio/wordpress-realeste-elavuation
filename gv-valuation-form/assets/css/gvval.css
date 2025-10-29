@@ -1,0 +1,396 @@
+body .gvval-wrapper {
+    --gv-primary: #1d4ed8;
+    --gv-border: #d1d5db;
+    --gv-bg: #ffffff;
+    --gv-text: #111827;
+    --gv-muted: #6b7280;
+    --gv-step-min-h: 520px;
+    position: relative;
+    background: var(--gv-bg);
+    padding: 24px;
+    border-radius: 16px;
+    box-shadow: 0 24px 60px rgba(15, 23, 42, 0.12);
+    max-width: 640px;
+    margin: 0 auto;
+    font-family: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+    color: var(--gv-text);
+}
+
+body .gvval-wrapper .gvval-progress {
+    margin-bottom: 24px;
+}
+
+body .gvval-wrapper .gvval-progress-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 15px;
+    color: var(--gv-muted);
+    margin-bottom: 8px;
+}
+
+body .gvval-wrapper .gvval-progress-bar {
+    width: 100%;
+    height: 6px;
+    background: #e5e7eb;
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+body .gvval-wrapper .gvval-progress-fill {
+    display: block;
+    height: 100%;
+    width: 0;
+    background: linear-gradient(90deg, #2563eb, #60a5fa);
+    border-radius: 999px;
+    transition: width 0.4s ease;
+}
+
+body .gvval-wrapper .gvval-form {
+    display: flex;
+    flex-direction: column;
+}
+
+body .gvval-wrapper .gvval-steps {
+    position: relative;
+}
+
+body .gvval-wrapper .gvval-step {
+    display: none;
+    min-height: var(--gv-step-min-h);
+    animation: gvvalFade 0.25s ease;
+}
+
+body .gvval-wrapper .gvval-step.gvval-active {
+    display: block;
+}
+
+body .gvval-wrapper .gvval-step.gvval-hidden {
+    display: none !important;
+}
+
+@keyframes gvvalFade {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+body .gvval-wrapper h3 {
+    font-size: 22px;
+    margin-bottom: 18px;
+}
+
+body .gvval-wrapper .gvval-field {
+    margin-bottom: 18px;
+}
+
+body .gvval-wrapper label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+
+body .gvval-wrapper input[type="text"],
+body .gvval-wrapper input[type="tel"],
+body .gvval-wrapper input[type="number"],
+body .gvval-wrapper select,
+body .gvval-wrapper textarea {
+    width: 100%;
+    border-radius: 12px;
+    border: 1px solid var(--gv-border);
+    padding: 12px 14px;
+    font-size: 16px;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    background: #fff;
+}
+
+body .gvval-wrapper input:focus,
+body .gvval-wrapper select:focus,
+body .gvval-wrapper textarea:focus {
+    border-color: var(--gv-primary);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+    outline: none;
+}
+
+body .gvval-wrapper .gvval-range input[type="range"] {
+    width: 100%;
+    -webkit-appearance: none;
+    background: transparent;
+}
+
+body .gvval-wrapper .gvval-range input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    background: var(--gv-primary);
+    cursor: pointer;
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.25);
+}
+
+body .gvval-wrapper .gvval-range input[type="range"]::-webkit-slider-runnable-track {
+    height: 6px;
+    background: #e5e7eb;
+    border-radius: 999px;
+}
+
+body .gvval-wrapper .gvval-range-output {
+    margin-top: 12px;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+body .gvval-wrapper .gvval-card-options,
+body .gvval-wrapper .gvval-card-stack {
+    display: grid;
+    gap: 16px;
+}
+
+body .gvval-wrapper .gvval-card-options {
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+
+body .gvval-wrapper .gvval-card {
+    border: 2px solid transparent;
+    border-radius: 16px;
+    padding: 18px;
+    background: #f9fafb;
+    cursor: pointer;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+    position: relative;
+}
+
+body .gvval-wrapper .gvval-card input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+body .gvval-wrapper .gvval-card span {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+body .gvval-wrapper .gvval-card.is-active,
+body .gvval-wrapper .gvval-card input:checked + span,
+body .gvval-wrapper .gvval-card input:checked ~ span {
+    border-color: var(--gv-primary);
+    box-shadow: 0 8px 24px rgba(37, 99, 235, 0.25);
+    background: #fff;
+}
+
+body .gvval-wrapper .gvval-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+body .gvval-wrapper .gvval-pill {
+    border-radius: 999px;
+    border: 1px solid var(--gv-border);
+    padding: 10px 18px;
+    background: #f8fafc;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 15px;
+    color: var(--gv-text);
+}
+
+body .gvval-wrapper .gvval-pill.is-active,
+body .gvval-wrapper .gvval-pill:hover {
+    border-color: var(--gv-primary);
+    color: #fff;
+    background: var(--gv-primary);
+    box-shadow: 0 8px 20px rgba(37, 99, 235, 0.25);
+}
+
+body .gvval-wrapper .gvval-checkbox {
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+body .gvval-wrapper .gvval-checkbox input {
+    width: 18px;
+    height: 18px;
+}
+
+body .gvval-wrapper .gvval-nested[hidden] {
+    display: none !important;
+}
+
+body .gvval-wrapper .gvval-nested {
+    margin-top: 8px;
+    padding-left: 10px;
+    border-left: 2px solid var(--gv-border);
+}
+
+body .gvval-wrapper .gvval-grid {
+    display: grid;
+    gap: 16px;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
+body .gvval-wrapper .gvval-upload {
+    position: relative;
+}
+
+body .gvval-wrapper .gvval-upload-drop {
+    border: 2px dashed var(--gv-border);
+    border-radius: 16px;
+    padding: 30px;
+    text-align: center;
+    color: var(--gv-muted);
+    background: #f9fafb;
+    position: relative;
+}
+
+body .gvval-wrapper .gvval-upload-drop input[type="file"] {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+}
+
+body .gvval-wrapper .gvval-upload-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 18px;
+}
+
+body .gvval-wrapper .gvval-upload-item {
+    position: relative;
+}
+
+body .gvval-wrapper .gvval-upload-item img {
+    width: 90px;
+    height: 90px;
+    object-fit: cover;
+    border-radius: 12px;
+    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.15);
+}
+
+body .gvval-wrapper .gvval-upload-item .gvval-remove {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: none;
+    background: #ef4444;
+    color: #fff;
+    cursor: pointer;
+    font-weight: bold;
+    line-height: 1;
+}
+
+body .gvval-wrapper .gvval-upload-loader {
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.85);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 16px;
+    z-index: 5;
+}
+
+body .gvval-wrapper .gvval-spinner {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    border: 4px solid #bfdbfe;
+    border-top-color: var(--gv-primary);
+    animation: gvvalSpin 0.9s linear infinite;
+}
+
+@keyframes gvvalSpin {
+    to { transform: rotate(360deg); }
+}
+
+body .gvval-wrapper .gvval-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 24px;
+}
+
+body .gvval-wrapper .gvval-back {
+    background: none;
+    border: none;
+    color: var(--gv-muted);
+    text-decoration: underline;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 0;
+    transition: color 0.2s ease;
+}
+
+body .gvval-wrapper .gvval-back:hover {
+    color: var(--gv-primary);
+}
+
+body .gvval-wrapper .gvval-back.gvval-disabled {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+body .gvval-wrapper .gvval-next,
+body .gvval-wrapper .gvval-submit {
+    border: none;
+    border-radius: 999px;
+    background: var(--gv-primary);
+    color: #fff;
+    padding: 12px 28px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 18px 30px rgba(37, 99, 235, 0.25);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+body .gvval-wrapper .gvval-next:hover,
+body .gvval-wrapper .gvval-submit:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 22px 40px rgba(37, 99, 235, 0.3);
+}
+
+body .gvval-wrapper .gvval-submit.is-loading {
+    opacity: 0.7;
+    pointer-events: none;
+}
+
+body .gvval-wrapper .gvval-hint {
+    font-size: 13px;
+    color: var(--gv-muted);
+    margin-top: 4px;
+    display: block;
+}
+
+body .gvval-wrapper .gvval-required {
+    color: #ef4444;
+    margin-left: 4px;
+}
+
+@media (max-width: 640px) {
+    body .gvval-wrapper {
+        padding: 20px;
+        border-radius: 12px;
+    }
+    body .gvval-wrapper .gvval-footer {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+    }
+    body .gvval-wrapper .gvval-back {
+        text-align: left;
+    }
+    body .gvval-wrapper .gvval-next,
+    body .gvval-wrapper .gvval-submit {
+        width: 100%;
+        justify-content: center;
+        text-align: center;
+    }
+}
