@@ -4,13 +4,14 @@ body .gvval-wrapper {
     --gv-bg: #ffffff;
     --gv-text: #111827;
     --gv-muted: #6b7280;
-    --gv-step-min-h: 520px;
+    --gv-step-min-h: 440px;
     position: relative;
     background: var(--gv-bg) !important;
-    padding: 24px;
-    border-radius: 16px;
+    padding: 24px 32px;
+    border-radius: 18px;
     box-shadow: 0 24px 60px rgba(15, 23, 42, 0.12);
-    max-width: 640px;
+    width: min(100%, 680px);
+    max-width: 680px;
     margin: 0 auto;
     font-family: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
     color: var(--gv-text) !important;
@@ -32,7 +33,7 @@ body .gvval-wrapper .gvval-progress-label span {
 }
 
 body .gvval-wrapper .gvval-progress {
-    margin-bottom: 24px;
+    margin-bottom: 20px;
 }
 
 body .gvval-wrapper .gvval-progress-top {
@@ -90,12 +91,12 @@ body .gvval-wrapper .gvval-step.gvval-hidden {
 }
 
 body .gvval-wrapper h3 {
-    font-size: 22px;
-    margin-bottom: 18px;
+    font-size: 24px;
+    margin-bottom: 20px;
 }
 
 body .gvval-wrapper .gvval-field {
-    margin-bottom: 18px;
+    margin-bottom: 20px;
 }
 
 body .gvval-wrapper label {
@@ -137,6 +138,14 @@ body .gvval-wrapper .gvval-range input[type="range"] {
     width: 100%;
     -webkit-appearance: none;
     background: transparent;
+}
+
+body .gvval-wrapper .gvval-range-scale {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    color: var(--gv-muted);
+    margin-bottom: 8px;
 }
 
 body .gvval-wrapper .gvval-range input[type="range"]::-webkit-slider-thumb {
@@ -237,6 +246,19 @@ body .gvval-wrapper .gvval-checkbox input {
     height: 18px;
 }
 
+body .gvval-wrapper .gvval-accessory {
+    border: 1px solid var(--gv-border);
+    border-radius: 16px;
+    padding: 18px;
+    background: #f9fafb;
+    margin-bottom: 18px;
+}
+
+body .gvval-wrapper .gvval-accessory > .gvval-checkbox {
+    font-size: 18px;
+    font-weight: 600;
+}
+
 body .gvval-wrapper .gvval-nested[hidden] {
     display: none !important;
 }
@@ -251,6 +273,11 @@ body .gvval-wrapper .gvval-grid {
     display: grid;
     gap: 16px;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
+body .gvval-wrapper .gvval-grid-two {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    align-items: end;
 }
 
 body .gvval-wrapper .gvval-upload {
@@ -337,6 +364,7 @@ body .gvval-wrapper .gvval-footer {
     justify-content: space-between;
     align-items: center;
     margin-top: 24px;
+    gap: 16px;
 }
 
 body .gvval-wrapper .gvval-back {
@@ -365,12 +393,16 @@ body .gvval-wrapper .gvval-submit {
     border-radius: 999px;
     background: var(--gv-primary);
     color: #fff;
-    padding: 12px 28px;
+    padding: 14px 32px;
     font-size: 16px;
     font-weight: 600;
     cursor: pointer;
     box-shadow: 0 18px 30px rgba(37, 99, 235, 0.25);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 140px;
 }
 
 body .gvval-wrapper .gvval-next:hover,
@@ -399,7 +431,8 @@ body .gvval-wrapper .gvval-required {
 @media (max-width: 640px) {
     body .gvval-wrapper {
         padding: 20px;
-        border-radius: 12px;
+        border-radius: 14px;
+        --gv-step-min-h: 360px;
     }
     body .gvval-wrapper .gvval-footer {
         flex-direction: column;

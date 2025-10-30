@@ -145,19 +145,17 @@
 
     function updateAddressLine($root) {
         var city = $.trim($root.find('#address_city').val());
-        var street = $.trim($root.find('#address_street').val());
-        var number = $.trim($root.find('#address_number').val());
+        var streetNumber = $.trim($root.find('#address_street_number').val());
+        var zip = $.trim($root.find('#address_zip').val());
         var parts = [];
-        if (street) {
-            parts.push(street);
+        if (streetNumber) {
+            parts.push(streetNumber);
         }
-        if (number) {
-            parts.push(number);
+        var cityZip = $.trim([zip, city].filter(function (item) { return item; }).join(' '));
+        if (cityZip) {
+            parts.push(cityZip);
         }
-        if (city) {
-            parts.push(city);
-        }
-        $root.find('#address_line').val(parts.join(' '));
+        $root.find('#address_line').val(parts.join(', '));
     }
 
     function collectFormData($root) {
@@ -178,8 +176,8 @@
             data.property_type = propertyType;
         }
         data.address_city = $.trim($form.find('#address_city').val());
-        data.address_street = $.trim($form.find('#address_street').val());
-        data.address_number = $.trim($form.find('#address_number').val());
+        data.address_zip = $.trim($form.find('#address_zip').val());
+        data.address_street_number = $.trim($form.find('#address_street_number').val());
         updateAddressLine($root);
         data.address_line = $.trim($form.find('#address_line').val());
 
@@ -225,9 +223,15 @@
         };
         data.accessories = accessories;
 
-        data.year_built = parseInt($form.find('#year_built').val(), 10) || '';
+        var builtYear = parseInt($form.find('#year_built').val(), 10) || '';
+        data.year_built = builtYear;
         data.has_renovation = $form.find('#has_renovation').is(':checked') ? 1 : 0;
-        data.year_renovated = data.has_renovation ? (parseInt($form.find('#year_renovated').val(), 10) || '') : '';
+        var renovated = data.has_renovation ? (parseInt($form.find('#year_renovated').val(), 10) || '') : '';
+        if (renovated && builtYear && renovated < builtYear) {
+            renovated = builtYear;
+            $form.find('#year_renovated').val(renovated);
+        }
+        data.year_renovated = renovated;
         data.heating = $form.find('#heating').val();
         data.heating_other_note = data.heating === 'other' ? $.trim($form.find('#heating_other_note').val()) : '';
         data.extras_text = $.trim($form.find('#extras_text').val());
@@ -264,11 +268,40 @@
         storeDraft(state, state.sessionId);
     }
 
-    function populateYears($select) {
+    function populateYears($select, opts) {
         var currentYear = new Date().getFullYear();
+        opts = opts || {};
+        var minYear = opts.min || 1900;
+        var maxYear = opts.max || currentYear;
+        if (maxYear < minYear) {
+            var tmp = maxYear;
+            maxYear = minYear;
+            minYear = tmp;
+        }
+        $select.empty();
         $select.append($('<option>', { value: '', text: 'Vyberte' }));
-        for (var y = currentYear; y >= 1900; y--) {
+        for (var y = maxYear; y >= minYear; y--) {
             $select.append($('<option>', { value: y, text: y }));
+        }
+    }
+
+    function refreshRenovationYears($root) {
+        var $built = $root.find('#year_built');
+        var $renovated = $root.find('#year_renovated');
+        var builtYear = parseInt($built.val(), 10) || '';
+        var currentValue = $renovated.val();
+        var hasRenovation = $root.find('#has_renovation').is(':checked');
+        if (builtYear) {
+            populateYears($renovated, { min: builtYear, max: new Date().getFullYear() });
+        } else {
+            populateYears($renovated);
+        }
+        if (currentValue && $renovated.find('option[value="' + currentValue + '"]').length) {
+            $renovated.val(currentValue);
+        } else if (hasRenovation && builtYear) {
+            $renovated.val(builtYear);
+        } else {
+            $renovated.val('');
         }
     }
 
@@ -286,11 +319,14 @@
         if (data.address_city) {
             $form.find('#address_city').val(data.address_city);
         }
-        if (data.address_street) {
-            $form.find('#address_street').val(data.address_street);
+        if (data.address_zip) {
+            $form.find('#address_zip').val(data.address_zip);
         }
-        if (data.address_number) {
-            $form.find('#address_number').val(data.address_number);
+        if (data.address_street_number) {
+            $form.find('#address_street_number').val(data.address_street_number);
+        } else if (data.address_street || data.address_number) {
+            var combined = $.trim((data.address_street || '') + ' ' + (data.address_number || ''));
+            $form.find('#address_street_number').val(combined);
         }
         if (data.area_sqm) {
             $form.find('#area_sqm_range').val(data.area_sqm);
@@ -340,10 +376,13 @@
         if (data.year_built) {
             $form.find('#year_built').val(data.year_built);
         }
+        refreshRenovationYears($root);
         if (parseInt(data.has_renovation, 10)) {
             $form.find('#has_renovation').prop('checked', true).trigger('change');
-            if (data.year_renovated) {
+            if (data.year_renovated && $form.find('#year_renovated option[value="' + data.year_renovated + '"]').length) {
                 $form.find('#year_renovated').val(data.year_renovated);
+            } else if (data.year_renovated && data.year_built && parseInt(data.year_renovated, 10) < parseInt(data.year_built, 10)) {
+                $form.find('#year_renovated').val(data.year_built);
             }
         }
         if (data.heating) {
@@ -474,6 +513,9 @@
         if (step === 1) {
             return !!propertyType;
         }
+        if (step === 2) {
+            return !!(data.address_city && data.address_street_number);
+        }
         if (step === 3) {
             return data.area_sqm >= 10 && data.area_sqm <= 200;
         }
@@ -535,7 +577,7 @@
         if (!GV.gmaps_key || typeof google === 'undefined' || !google.maps || !google.maps.places) {
             return;
         }
-        var input = $root.find('#address_street')[0];
+        var input = $root.find('#address_street_number')[0];
         if (!input) {
             return;
         }
@@ -548,7 +590,7 @@
             if (!place || !place.address_components) {
                 return;
             }
-            var city = '', street = '', number = '';
+            var city = '', street = '', number = '', postal = '';
             place.address_components.forEach(function (component) {
                 if (component.types.indexOf('locality') > -1 || component.types.indexOf('administrative_area_level_2') > -1) {
                     city = component.long_name;
@@ -559,15 +601,22 @@
                 if (component.types.indexOf('street_number') > -1) {
                     number = component.long_name;
                 }
+                if (component.types.indexOf('postal_code') > -1) {
+                    postal = component.long_name;
+                }
             });
             if (city) {
                 $root.find('#address_city').val(city);
             }
-            if (street) {
-                $root.find('#address_street').val(street);
-            }
+            var combined = street;
             if (number) {
-                $root.find('#address_number').val(number);
+                combined = combined ? combined + ' ' + number : number;
+            }
+            if (combined) {
+                $root.find('#address_street_number').val(combined.trim());
+            }
+            if (postal) {
+                $root.find('#address_zip').val(postal);
             }
             updateAddressLine($root);
         });
@@ -592,6 +641,10 @@
             $root.find('#area_sqm_range').val(val);
             $root.find('.gvval-area-output').text(val);
         });
+        var initialArea = parseInt($root.find('#area_sqm_range').val(), 10) || 10;
+        $root.find('#area_sqm_range').val(initialArea);
+        $root.find('#area_sqm_input').val(initialArea);
+        $root.find('.gvval-area-output').text(initialArea);
 
         $root.find('input[name="property_type"]').on('change', function () {
             var val = $(this).val();
@@ -657,9 +710,22 @@
                 $root.find('[data-toggle="has_renovation"]').attr('hidden', 'hidden');
                 $root.find('#year_renovated').val('');
             }
+            refreshRenovationYears($root);
         }).trigger('change');
 
-        $root.find('#address_city, #address_street, #address_number').on('input change', function () {
+        $root.find('#year_built').on('change', function () {
+            refreshRenovationYears($root);
+        }).trigger('change');
+
+        $root.find('#year_renovated').on('change', function () {
+            var built = parseInt($root.find('#year_built').val(), 10);
+            var val = parseInt($(this).val(), 10);
+            if (built && val && val < built) {
+                $(this).val(built);
+            }
+        });
+
+        $root.find('#address_city, #address_street_number, #address_zip').on('input change', function () {
             updateAddressLine($root);
         });
 
@@ -738,6 +804,8 @@
             var loader = $root.find('.gvval-upload-loader');
             loader.removeAttr('hidden');
             var uploads = 0;
+            var successes = 0;
+            var errors = [];
             for (var i = 0; i < toUpload; i++) {
                 (function (file) {
                     var formData = new FormData();
@@ -749,17 +817,30 @@
                         method: 'POST',
                         data: formData,
                         processData: false,
-                        contentType: false
+                        contentType: false,
+                        dataType: 'json'
                     }).done(function (resp) {
                         if (resp && resp.success && resp.data) {
                             state.photos.push(resp.data);
+                            successes++;
                             renderPhotos($root);
+                        } else if (resp && resp.data && resp.data.message) {
+                            errors.push(resp.data.message);
+                        } else {
+                            errors.push('Nahratie zlyhalo.');
                         }
+                    }).fail(function () {
+                        errors.push('Nahratie zlyhalo.');
                     }).always(function () {
                         uploads++;
                         if (uploads === toUpload) {
                             loader.attr('hidden', 'hidden');
-                            saveStep($root);
+                            if (successes > 0) {
+                                saveStep($root);
+                            }
+                            if (errors.length) {
+                                alert(errors.join('\n'));
+                            }
                         }
                     });
                 })(files[i]);
