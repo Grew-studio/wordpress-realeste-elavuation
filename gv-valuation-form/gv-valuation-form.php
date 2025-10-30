@@ -494,7 +494,9 @@ class GVValuationForm {
         echo '<span class="gvval-analytics-note">' . esc_html__( 'Zobrazenie postupov krokov a konverzií.', 'gv-valuation' ) . '</span>';
         echo '<button class="button button-secondary gvval-reset-analytics">' . esc_html__( 'Resetovať analytiku', 'gv-valuation' ) . '</button>';
         echo '</div>';
+        echo '<div class="gvval-analytics-table-wrap">';
         echo '<table class="widefat gvval-analytics-table">';
+        echo '<colgroup><col class="gvval-analytics-step" /><col class="gvval-analytics-metric" /><col class="gvval-analytics-metric" /><col class="gvval-analytics-metric" /></colgroup>';
         echo '<thead><tr>';
         echo '<th>' . esc_html__( 'Krok', 'gv-valuation' ) . '</th>';
         echo '<th>' . esc_html__( 'Unikátni návštevníci', 'gv-valuation' ) . '</th>';
@@ -515,17 +517,22 @@ class GVValuationForm {
             echo '</tr>';
         }
         echo '</tbody></table>';
+        echo '</div>';
         echo '<style>
         .gvval-admin .gvval-analytics-header{display:flex;align-items:center;gap:12px;margin:12px 0 16px;}
         .gvval-admin .gvval-analytics-note{font-size:14px;color:#4b5563;}
-        .gvval-admin .gvval-analytics-table{margin-top:0;border-radius:12px;overflow:hidden;box-shadow:0 12px 30px rgba(15,23,42,0.08);}
+        .gvval-admin .gvval-analytics-table-wrap{max-width:680px;margin:0;padding:0 12px 0 0;}
+        .gvval-admin .gvval-analytics-table{margin-top:0;border-radius:12px;overflow:hidden;box-shadow:0 12px 30px rgba(15,23,42,0.08);width:100%;table-layout:fixed;}
+        .gvval-admin .gvval-analytics-table col.gvval-analytics-step{width:40%;}
+        .gvval-admin .gvval-analytics-table col.gvval-analytics-metric{width:20%;}
         .gvval-admin .gvval-analytics-table th,
-        .gvval-admin .gvval-analytics-table td{padding:10px 16px;text-align:center;font-size:14px;}
+        .gvval-admin .gvval-analytics-table td{padding:8px 12px;text-align:center;font-size:13px;}
         .gvval-admin .gvval-analytics-table thead th{background:#f3f4f6;font-weight:600;color:#1f2937;}
         .gvval-admin .gvval-analytics-table td.gvval-analytics-col-step{text-align:left;font-weight:600;color:#1f2937;}
         .gvval-admin .gvval-analytics-table tbody tr:nth-child(even){background:#f9fafb;}
         .gvval-admin .gvval-analytics-col-conv{font-weight:600;color:#0f766e;}
         .gvval-admin .gvval-analytics-table tbody tr:hover{background:#eef2ff;}
+        @media (min-width: 1024px){.gvval-admin .gvval-analytics-table-wrap{padding-right:0;}}
         </style>';
 
         $this->print_admin_inline_script();

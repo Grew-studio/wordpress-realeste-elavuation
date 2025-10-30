@@ -138,6 +138,15 @@
         $steps.removeClass('gvval-active');
         var $current = $steps.filter('[data-step="' + state.currentStep + '"]');
         $current.addClass('gvval-active');
+        if ($current.length) {
+            if (typeof window.requestAnimationFrame === 'function') {
+                window.requestAnimationFrame(function () {
+                    $current.scrollTop(0);
+                });
+            } else {
+                $current.scrollTop(0);
+            }
+        }
         $root.find('.gvval-back').toggleClass('gvval-disabled', currentIndex <= 0);
         $root.find('.gvval-next').toggle(visible[visible.length - 1] !== state.currentStep);
         $root.find('.gvval-submit').toggle(visible[visible.length - 1] === state.currentStep);
@@ -227,7 +236,7 @@
         data.year_built = builtYear;
         data.has_renovation = $form.find('#has_renovation').is(':checked') ? 1 : 0;
         var renovated = data.has_renovation ? (parseInt($form.find('#year_renovated').val(), 10) || '') : '';
-        if (renovated && builtYear && renovated < builtYear) {
+        if (renovated && builtYear && renovated > builtYear) {
             renovated = builtYear;
             $form.find('#year_renovated').val(renovated);
         }
@@ -292,7 +301,7 @@
         var currentValue = $renovated.val();
         var hasRenovation = $root.find('#has_renovation').is(':checked');
         if (builtYear) {
-            populateYears($renovated, { min: builtYear, max: new Date().getFullYear() });
+            populateYears($renovated, { min: 1900, max: builtYear });
         } else {
             populateYears($renovated);
         }
@@ -381,7 +390,7 @@
             $form.find('#has_renovation').prop('checked', true).trigger('change');
             if (data.year_renovated && $form.find('#year_renovated option[value="' + data.year_renovated + '"]').length) {
                 $form.find('#year_renovated').val(data.year_renovated);
-            } else if (data.year_renovated && data.year_built && parseInt(data.year_renovated, 10) < parseInt(data.year_built, 10)) {
+            } else if (data.year_renovated && data.year_built && parseInt(data.year_renovated, 10) > parseInt(data.year_built, 10)) {
                 $form.find('#year_renovated').val(data.year_built);
             }
         }
@@ -802,7 +811,7 @@
                 return;
             }
             var loader = $root.find('.gvval-upload-loader');
-            loader.removeAttr('hidden');
+            loader.prop('hidden', false).removeAttr('hidden');
             var uploads = 0;
             var successes = 0;
             var errors = [];
@@ -834,7 +843,7 @@
                     }).always(function () {
                         uploads++;
                         if (uploads === toUpload) {
-                            loader.attr('hidden', 'hidden');
+                            loader.prop('hidden', true).attr('hidden', 'hidden');
                             if (successes > 0) {
                                 saveStep($root);
                             }

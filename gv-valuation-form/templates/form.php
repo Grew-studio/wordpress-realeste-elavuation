@@ -40,7 +40,11 @@ if ( ! defined( 'ABSPATH' ) ) {
             </section>
             <section class="gvval-step" data-step="2">
                 <h3>Adresa</h3>
-                <div class="gvval-grid gvval-grid-two">
+                <div class="gvval-grid gvval-grid-three">
+                    <div class="gvval-field gvval-field-wide">
+                        <label for="address_street_number">Ulica a číslo domu</label>
+                        <input type="text" id="address_street_number" name="address_street_number" autocomplete="address-line1" />
+                    </div>
                     <div class="gvval-field">
                         <label for="address_city">Mesto/Obec</label>
                         <input type="text" id="address_city" name="address_city" autocomplete="address-level2" />
@@ -49,10 +53,6 @@ if ( ! defined( 'ABSPATH' ) ) {
                         <label for="address_zip">PSČ</label>
                         <input type="text" id="address_zip" name="address_zip" inputmode="numeric" autocomplete="postal-code" />
                     </div>
-                </div>
-                <div class="gvval-field">
-                    <label for="address_street_number">Ulica a číslo domu</label>
-                    <input type="text" id="address_street_number" name="address_street_number" autocomplete="address-line1" />
                 </div>
                 <input type="hidden" id="address_line" name="address_line" />
             </section>
@@ -118,29 +118,31 @@ if ( ! defined( 'ABSPATH' ) ) {
             </section>
             <section class="gvval-step" data-step="7">
                 <h3>Príslušenstvo</h3>
-                <div class="gvval-accessory">
-                    <label class="gvval-checkbox"><input type="checkbox" id="has_balcony" name="has_balcony" /> Balkón</label>
-                    <div class="gvval-nested" data-toggle="has_balcony">
-                        <label for="balcony_area">Plocha balkóna (m²)</label>
-                        <input type="number" id="balcony_area" name="balcony_area" min="1" max="60" />
+                <div class="gvval-accessories-grid">
+                    <div class="gvval-accessory">
+                        <label class="gvval-checkbox"><input type="checkbox" id="has_balcony" name="has_balcony" /> Balkón</label>
+                        <div class="gvval-nested gvval-nested-inline" data-toggle="has_balcony">
+                            <label for="balcony_area">Plocha balkóna (m²)</label>
+                            <input type="number" id="balcony_area" name="balcony_area" min="1" max="60" />
+                        </div>
+                    </div>
+                    <div class="gvval-accessory">
+                        <label class="gvval-checkbox"><input type="checkbox" id="has_terrace" name="has_terrace" /> Terasa</label>
+                        <div class="gvval-nested gvval-nested-inline" data-toggle="has_terrace">
+                            <label for="terrace_area">Plocha terasy (m²)</label>
+                            <input type="number" id="terrace_area" name="terrace_area" min="2" max="200" />
+                        </div>
+                    </div>
+                    <div class="gvval-accessory">
+                        <label class="gvval-checkbox"><input type="checkbox" id="has_cellar" name="has_cellar" /> Pivnica</label>
+                        <div class="gvval-nested gvval-nested-inline" data-toggle="has_cellar">
+                            <label for="cellar_area">Plocha pivnice (m²)</label>
+                            <input type="number" id="cellar_area" name="cellar_area" min="1" max="50" />
+                        </div>
                     </div>
                 </div>
-                <div class="gvval-accessory">
-                    <label class="gvval-checkbox"><input type="checkbox" id="has_terrace" name="has_terrace" /> Terasa</label>
-                    <div class="gvval-nested" data-toggle="has_terrace">
-                        <label for="terrace_area">Plocha terasy (m²)</label>
-                        <input type="number" id="terrace_area" name="terrace_area" min="2" max="200" />
-                    </div>
-                </div>
-                <div class="gvval-accessory">
-                    <label class="gvval-checkbox"><input type="checkbox" id="has_cellar" name="has_cellar" /> Pivnica</label>
-                    <div class="gvval-nested" data-toggle="has_cellar">
-                        <label for="cellar_area">Plocha pivnice (m²)</label>
-                        <input type="number" id="cellar_area" name="cellar_area" min="1" max="50" />
-                    </div>
-                </div>
-                <div class="gvval-field">
-                    <span>Parkovanie</span>
+                <div class="gvval-field gvval-field-compact">
+                    <span class="gvval-field-title">Parkovanie</span>
                     <div class="gvval-pills gvval-parking">
                         <button type="button" class="gvval-pill" data-value="none">Bez parkovania</button>
                         <button type="button" class="gvval-pill" data-value="street">Ulica</button>
@@ -150,7 +152,7 @@ if ( ! defined( 'ABSPATH' ) ) {
                     </div>
                     <input type="hidden" name="parking" id="parking" value="none" />
                 </div>
-                <div class="gvval-nested" data-toggle="parking">
+                <div class="gvval-nested gvval-nested-inline" data-toggle="parking">
                     <label for="parking_slots">Počet parkovacích miest</label>
                     <input type="number" id="parking_slots" name="parking_slots" min="1" max="3" />
                 </div>
