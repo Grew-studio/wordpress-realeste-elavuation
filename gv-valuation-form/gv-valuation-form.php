@@ -490,9 +490,11 @@ class GVValuationForm {
         $max_step = 10;
 
         echo '<h2>' . esc_html__( 'Analytika', 'gv-valuation' ) . '</h2>';
+        echo '<div class="gvval-analytics-header">';
+        echo '<span class="gvval-analytics-note">' . esc_html__( 'Zobrazenie postupov krokov a konverzií.', 'gv-valuation' ) . '</span>';
         echo '<button class="button button-secondary gvval-reset-analytics">' . esc_html__( 'Resetovať analytiku', 'gv-valuation' ) . '</button>';
-        echo '<table class="widefat fixed gvval-analytics" style="margin-top:20px;table-layout:fixed;">';
-        echo '<colgroup><col width="15%"/><col width="30%"/><col width="30%"/><col width="25%"/></colgroup>';
+        echo '</div>';
+        echo '<table class="widefat gvval-analytics-table">';
         echo '<thead><tr>';
         echo '<th>' . esc_html__( 'Krok', 'gv-valuation' ) . '</th>';
         echo '<th>' . esc_html__( 'Unikátni návštevníci', 'gv-valuation' ) . '</th>';
@@ -506,13 +508,25 @@ class GVValuationForm {
             $label = ( $i === $max_step ) ? 'REDIRECT' : sprintf( __( 'Krok %d', 'gv-valuation' ), $i );
             $conversion = $current_count > 0 ? round( ( $next_count / $current_count ) * 100, 2 ) : 0;
             echo '<tr>';
-            echo '<td>' . esc_html( $label ) . '</td>';
-            echo '<td>' . esc_html( $current_count ) . '</td>';
-            echo '<td>' . esc_html( $next_count ) . '</td>';
-            echo '<td>' . esc_html( $conversion ) . '</td>';
+            echo '<td class="gvval-analytics-col-step">' . esc_html( $label ) . '</td>';
+            echo '<td class="gvval-analytics-col">' . esc_html( $current_count ) . '</td>';
+            echo '<td class="gvval-analytics-col">' . esc_html( $next_count ) . '</td>';
+            echo '<td class="gvval-analytics-col gvval-analytics-col-conv">' . esc_html( $conversion ) . '</td>';
             echo '</tr>';
         }
         echo '</tbody></table>';
+        echo '<style>
+        .gvval-admin .gvval-analytics-header{display:flex;align-items:center;gap:12px;margin:12px 0 16px;}
+        .gvval-admin .gvval-analytics-note{font-size:14px;color:#4b5563;}
+        .gvval-admin .gvval-analytics-table{margin-top:0;border-radius:12px;overflow:hidden;box-shadow:0 12px 30px rgba(15,23,42,0.08);}
+        .gvval-admin .gvval-analytics-table th,
+        .gvval-admin .gvval-analytics-table td{padding:10px 16px;text-align:center;font-size:14px;}
+        .gvval-admin .gvval-analytics-table thead th{background:#f3f4f6;font-weight:600;color:#1f2937;}
+        .gvval-admin .gvval-analytics-table td.gvval-analytics-col-step{text-align:left;font-weight:600;color:#1f2937;}
+        .gvval-admin .gvval-analytics-table tbody tr:nth-child(even){background:#f9fafb;}
+        .gvval-admin .gvval-analytics-col-conv{font-weight:600;color:#0f766e;}
+        .gvval-admin .gvval-analytics-table tbody tr:hover{background:#eef2ff;}
+        </style>';
 
         $this->print_admin_inline_script();
     }
@@ -581,31 +595,44 @@ class GVValuationForm {
         $ua = isset( $_SERVER['HTTP_USER_AGENT'] ) ? sanitize_text_field( wp_unslash( $_SERVER['HTTP_USER_AGENT'] ) ) : '';
 
         $encoded = wp_json_encode( $data );
+        if ( false === $encoded ) {
+            $encoded = '{}';
+        }
+
+        $current_step_value = ( null === $current_step ) ? null : intval( $current_step );
+        $completed_value    = ( null === $completed ) ? null : (int) (bool) $completed;
+
         if ( $existing ) {
             $fields = array(
                 'data'       => $encoded,
                 'updated_at' => $now,
             );
             $format = array( '%s', '%s' );
-            if ( null !== $current_step ) {
-                $fields['current_step'] = intval( $current_step );
+            if ( null !== $current_step_value ) {
+                $fields['current_step'] = $current_step_value;
                 $format[] = '%d';
             }
-            if ( null !== $completed ) {
-                $fields['completed'] = intval( $completed );
+            if ( null !== $completed_value ) {
+                $fields['completed'] = $completed_value;
                 $format[] = '%d';
             }
             $wpdb->update( $this->table_submissions, $fields, array( 'session_id' => $session_id ), $format, array( '%s' ) );
             return $existing->id;
         } else {
+            if ( null === $current_step_value ) {
+                $current_step_value = 0;
+            }
+            if ( null === $completed_value ) {
+                $completed_value = 0;
+            }
             $insert = array(
                 'session_id'  => $session_id,
                 'ip'          => $ip,
                 'user_agent'  => $ua,
                 'started_at'  => $now,
                 'updated_at'  => $now,
-                'current_step'=> $current_step,
-                'completed'   => $completed ? 1 : 0,
+                'current_step'=> $current_step_value,
+                'completed'   => $completed_value,
                 'data'        => $encoded,
             );
             $format = array( '%s', '%s', '%s', '%s', '%s', '%d', '%d', '%s' );
@@ -664,8 +691,8 @@ class GVValuationForm {
             'phone_e164',
             'property_type',
             'address_city',
-            'address_street',
-            'address_number',
+            'address_street_number',
+            'address_zip',
             'address_line',
             'rooms',
             'floor',
@@ -1153,14 +1180,15 @@ class GVValuationForm {
 
     protected function format_rooms_label( $value ) {
         $map = array(
-            '1'       => '1',
-            '1_5'     => '1.5',
-            '2'       => '2',
-            '2_5'     => '2.5',
-            '3'       => '3',
-            '3_5'     => '3.5',
-            '4'       => '4',
-            '5_plus'  => '5+',
+            '1'      => '1',
+            '1_5'    => '1.5',
+            '2'      => '2',
+            '2_5'    => '2.5',
+            '3'      => '3',
+            '3_5'    => '3.5',
+            '4'      => '4',
+            '5'      => '5',
+            '5_plus' => '5+',
         );
         return isset( $map[ $value ] ) ? $map[ $value ] : $value;
     }

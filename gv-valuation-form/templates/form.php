@@ -39,20 +39,20 @@ if ( ! defined( 'ABSPATH' ) ) {
                 </div>
             </section>
             <section class="gvval-step" data-step="2">
-                <h3>Adresa / bod na mape</h3>
-                <div class="gvval-grid">
+                <h3>Adresa</h3>
+                <div class="gvval-grid gvval-grid-two">
                     <div class="gvval-field">
                         <label for="address_city">Mesto/Obec</label>
                         <input type="text" id="address_city" name="address_city" autocomplete="address-level2" />
                     </div>
                     <div class="gvval-field">
-                        <label for="address_street">Ulica</label>
-                        <input type="text" id="address_street" name="address_street" autocomplete="address-line1" />
+                        <label for="address_zip">PSČ</label>
+                        <input type="text" id="address_zip" name="address_zip" inputmode="numeric" autocomplete="postal-code" />
                     </div>
-                    <div class="gvval-field">
-                        <label for="address_number">Číslo</label>
-                        <input type="text" id="address_number" name="address_number" autocomplete="address-line2" />
-                    </div>
+                </div>
+                <div class="gvval-field">
+                    <label for="address_street_number">Ulica a číslo domu</label>
+                    <input type="text" id="address_street_number" name="address_street_number" autocomplete="address-line1" />
                 </div>
                 <input type="hidden" id="address_line" name="address_line" />
             </section>
@@ -60,24 +60,23 @@ if ( ! defined( 'ABSPATH' ) ) {
                 <h3>Výmera podlahy (m²)</h3>
                 <div class="gvval-field gvval-range">
                     <label for="area_sqm_range">Vyberte výmeru<span class="gvval-required">*</span></label>
-                    <input type="range" id="area_sqm_range" name="area_sqm_range" min="10" max="200" step="1" />
-                    <div class="gvval-range-output"><span class="gvval-area-output">0</span> m²</div>
+                    <div class="gvval-range-scale"><span>10 m²</span><span>200 m²</span></div>
+                    <input type="range" id="area_sqm_range" name="area_sqm_range" min="10" max="200" step="1" value="10" />
+                    <div class="gvval-range-output"><span class="gvval-area-output">10</span> m²</div>
                 </div>
                 <div class="gvval-field">
                     <label for="area_sqm_input">Alebo zadajte presne</label>
-                    <input type="number" id="area_sqm_input" name="area_sqm_input" min="10" max="200" step="1" />
+                    <input type="number" id="area_sqm_input" name="area_sqm_input" min="10" max="200" step="1" value="10" />
                 </div>
             </section>
             <section class="gvval-step" data-step="4">
                 <h3>Počet izieb</h3>
                 <div class="gvval-pills" role="radiogroup">
                     <button type="button" class="gvval-pill" data-value="1">1</button>
-                    <button type="button" class="gvval-pill" data-value="1_5">1.5</button>
                     <button type="button" class="gvval-pill" data-value="2">2</button>
-                    <button type="button" class="gvval-pill" data-value="2_5">2.5</button>
                     <button type="button" class="gvval-pill" data-value="3">3</button>
-                    <button type="button" class="gvval-pill" data-value="3_5">3.5</button>
                     <button type="button" class="gvval-pill" data-value="4">4</button>
+                    <button type="button" class="gvval-pill" data-value="5">5</button>
                     <button type="button" class="gvval-pill" data-value="5_plus">5+</button>
                 </div>
                 <input type="hidden" name="rooms" id="rooms" />

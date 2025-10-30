@@ -4,20 +4,36 @@ body .gvval-wrapper {
     --gv-bg: #ffffff;
     --gv-text: #111827;
     --gv-muted: #6b7280;
-    --gv-step-min-h: 520px;
+    --gv-step-min-h: 440px;
     position: relative;
-    background: var(--gv-bg);
-    padding: 24px;
-    border-radius: 16px;
+    background: var(--gv-bg) !important;
+    padding: 24px 32px;
+    border-radius: 18px;
     box-shadow: 0 24px 60px rgba(15, 23, 42, 0.12);
-    max-width: 640px;
+    width: min(100%, 680px);
+    max-width: 680px;
     margin: 0 auto;
     font-family: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
-    color: var(--gv-text);
+    color: var(--gv-text) !important;
+}
+
+body .gvval-wrapper h3,
+body .gvval-wrapper label,
+body .gvval-wrapper .gvval-progress-label,
+body .gvval-wrapper .gvval-range-output,
+body .gvval-wrapper .gvval-pill,
+body .gvval-wrapper .gvval-card span {
+    color: var(--gv-text) !important;
+}
+
+body .gvval-wrapper .gvval-hint,
+body .gvval-wrapper .gvval-progress-top,
+body .gvval-wrapper .gvval-progress-label span {
+    color: var(--gv-muted) !important;
 }
 
 body .gvval-wrapper .gvval-progress {
-    margin-bottom: 24px;
+    margin-bottom: 20px;
 }
 
 body .gvval-wrapper .gvval-progress-top {
@@ -75,12 +91,12 @@ body .gvval-wrapper .gvval-step.gvval-hidden {
 }
 
 body .gvval-wrapper h3 {
-    font-size: 22px;
-    margin-bottom: 18px;
+    font-size: 24px;
+    margin-bottom: 20px;
 }
 
 body .gvval-wrapper .gvval-field {
-    margin-bottom: 18px;
+    margin-bottom: 20px;
 }
 
 body .gvval-wrapper label {
@@ -96,11 +112,18 @@ body .gvval-wrapper select,
 body .gvval-wrapper textarea {
     width: 100%;
     border-radius: 12px;
-    border: 1px solid var(--gv-border);
+    border: 1px solid var(--gv-border) !important;
     padding: 12px 14px;
     font-size: 16px;
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
-    background: #fff;
+    background: #fff !important;
+    color: var(--gv-text) !important;
+}
+
+body .gvval-wrapper input::placeholder,
+body .gvval-wrapper textarea::placeholder {
+    color: var(--gv-muted) !important;
+    opacity: 1;
 }
 
 body .gvval-wrapper input:focus,
@@ -115,6 +138,14 @@ body .gvval-wrapper .gvval-range input[type="range"] {
     width: 100%;
     -webkit-appearance: none;
     background: transparent;
+}
+
+body .gvval-wrapper .gvval-range-scale {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    color: var(--gv-muted);
+    margin-bottom: 8px;
 }
 
 body .gvval-wrapper .gvval-range input[type="range"]::-webkit-slider-thumb {
@@ -150,10 +181,10 @@ body .gvval-wrapper .gvval-card-options {
 }
 
 body .gvval-wrapper .gvval-card {
-    border: 2px solid transparent;
+    border: 2px solid transparent !important;
     border-radius: 16px;
     padding: 18px;
-    background: #f9fafb;
+    background: #f9fafb !important;
     cursor: pointer;
     transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
     position: relative;
@@ -173,9 +204,9 @@ body .gvval-wrapper .gvval-card span {
 body .gvval-wrapper .gvval-card.is-active,
 body .gvval-wrapper .gvval-card input:checked + span,
 body .gvval-wrapper .gvval-card input:checked ~ span {
-    border-color: var(--gv-primary);
+    border-color: var(--gv-primary) !important;
     box-shadow: 0 8px 24px rgba(37, 99, 235, 0.25);
-    background: #fff;
+    background: #fff !important;
 }
 
 body .gvval-wrapper .gvval-pills {
@@ -186,9 +217,9 @@ body .gvval-wrapper .gvval-pills {
 
 body .gvval-wrapper .gvval-pill {
     border-radius: 999px;
-    border: 1px solid var(--gv-border);
+    border: 1px solid var(--gv-border) !important;
     padding: 10px 18px;
-    background: #f8fafc;
+    background: #f8fafc !important;
     cursor: pointer;
     transition: all 0.2s ease;
     font-size: 15px;
@@ -197,7 +228,7 @@ body .gvval-wrapper .gvval-pill {
 
 body .gvval-wrapper .gvval-pill.is-active,
 body .gvval-wrapper .gvval-pill:hover {
-    border-color: var(--gv-primary);
+    border-color: var(--gv-primary) !important;
     color: #fff;
     background: var(--gv-primary);
     box-shadow: 0 8px 20px rgba(37, 99, 235, 0.25);
@@ -213,6 +244,19 @@ body .gvval-wrapper .gvval-checkbox {
 body .gvval-wrapper .gvval-checkbox input {
     width: 18px;
     height: 18px;
+}
+
+body .gvval-wrapper .gvval-accessory {
+    border: 1px solid var(--gv-border);
+    border-radius: 16px;
+    padding: 18px;
+    background: #f9fafb;
+    margin-bottom: 18px;
+}
+
+body .gvval-wrapper .gvval-accessory > .gvval-checkbox {
+    font-size: 18px;
+    font-weight: 600;
 }
 
 body .gvval-wrapper .gvval-nested[hidden] {
@@ -231,17 +275,22 @@ body .gvval-wrapper .gvval-grid {
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
 }
 
+body .gvval-wrapper .gvval-grid-two {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    align-items: end;
+}
+
 body .gvval-wrapper .gvval-upload {
     position: relative;
 }
 
 body .gvval-wrapper .gvval-upload-drop {
-    border: 2px dashed var(--gv-border);
+    border: 2px dashed var(--gv-border) !important;
     border-radius: 16px;
     padding: 30px;
     text-align: center;
-    color: var(--gv-muted);
-    background: #f9fafb;
+    color: var(--gv-muted) !important;
+    background: #f9fafb !important;
     position: relative;
 }
 
@@ -315,6 +364,7 @@ body .gvval-wrapper .gvval-footer {
     justify-content: space-between;
     align-items: center;
     margin-top: 24px;
+    gap: 16px;
 }
 
 body .gvval-wrapper .gvval-back {
@@ -343,12 +393,16 @@ body .gvval-wrapper .gvval-submit {
     border-radius: 999px;
     background: var(--gv-primary);
     color: #fff;
-    padding: 12px 28px;
+    padding: 14px 32px;
     font-size: 16px;
     font-weight: 600;
     cursor: pointer;
     box-shadow: 0 18px 30px rgba(37, 99, 235, 0.25);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 140px;
 }
 
 body .gvval-wrapper .gvval-next:hover,
@@ -377,7 +431,8 @@ body .gvval-wrapper .gvval-required {
 @media (max-width: 640px) {
     body .gvval-wrapper {
         padding: 20px;
-        border-radius: 12px;
+        border-radius: 14px;
+        --gv-step-min-h: 360px;
     }
     body .gvval-wrapper .gvval-footer {
         flex-direction: column;
